@@ -136,11 +136,14 @@ public class ShoppingCart : IShoppingCart
 ////////////////////////////
 //Program.cs              //
 ////////////////////////////
-builder.Services.AddScoped<IShoppingCart, ShoppingCart>(sp => 
-{
-    return ShoppingCart.GetCart(sp.GetRequiredService<ISession>(), sp.GetRequiredService<BethanysPieShopDbContext>());
-});
 
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IShoppingCart, ShoppingCart>(sp =>
+{
+    return ShoppingCart.GetCart(sp.GetRequiredService<IHttpContextAccessor>().HttpContext?.Session, sp.GetRequiredService<BethanysPieShopDbContext>());
+});
 ////////////////////////////
 //ShoppingCartViewModel.cs//
 ////////////////////////////
