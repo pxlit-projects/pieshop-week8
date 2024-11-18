@@ -300,6 +300,35 @@ public RedirectToActionResult RemoveFromShoppingCart(int pieId)
 </div>
 
 ////////////////////////////////////////////////////////
+//Components/ShoppingCartSummary.cs					  //
+////////////////////////////////////////////////////////
+
+using BethanysPieShop.Models;
+using BethanysPieShop.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BethanysPieShop.Components;
+
+public class ShoppingCartSummary : ViewComponent
+{
+    private readonly IShoppingCart _shoppingCart;
+
+    public ShoppingCartSummary(IShoppingCart shoppingCart)
+    {
+        _shoppingCart = shoppingCart;
+    }
+    public IViewComponentResult Invoke()
+    {
+        var shoppingCartViewModel = new ShoppingCartViewModel(
+            _shoppingCart.GetShoppingCartItems(),
+            _shoppingCart.GetShoppingCartTotal()
+        );
+
+        return View(shoppingCartViewModel);
+    }
+}
+
+////////////////////////////////////////////////////////
 //Shared/Components/ShoppingCartSummary/Default.cshtml//
 ////////////////////////////////////////////////////////
 
@@ -320,3 +349,11 @@ public RedirectToActionResult RemoveFromShoppingCart(int pieId)
         </li>
     </ul>
 }
+
+////////////////////////////////////////////////////////
+//Invoke a view-component							////
+////////////////////////////////////////////////////////
+
+<vc:shopping-cart-summary></vc:shopping-cart-summary>
+@*  @await Component.InvokeAsync(nameof(ShoppingCartSummary)) *@
+
